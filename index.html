@@ -83,6 +83,10 @@
       <a style="font-weight: bold;" href="https://github.com/jbialobr/JsQRScanner">The source code is hosted on GitHub</a>
     </div>
   <script type="text/javascript">
+
+    if(!navigator || (navigator && !navigator.getUserMedia)) {
+        alert("Navigator is not available")
+    }
     function onQRCodeScanned(scannedText)
     {
     	var scannedTextMemo = document.getElementById("scannedTextMemo");
