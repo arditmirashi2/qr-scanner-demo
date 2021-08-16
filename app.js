@@ -1,27 +1,29 @@
-window.onload = () => {
-    const select = window.prompt("Select a camera mode [user, environment]")
+var constraints = { video: { facingMode: "user" }, audio: false };
 
+const cameraView = document.querySelector("#camera--view"),
+    cameraOutput = document.querySelector("#camera--output"),
+    cameraSensor = document.querySelector("#camera--sensor"),
+    cameraTrigger = document.querySelector("#camera--trigger")
 
-    const video = document.getElementById("scanner");
-
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const constraints = {
-            video: {
-                width: {
-                  min: 1280,
-                  ideal: 1920,
-                  max: 2560,
-                },
-                height: {
-                  min: 720,
-                  ideal: 1080,
-                  max: 1440
-                },
-                facingMode: select
-              },
-            audio: false
-        }
-
-        navigator.mediaDevices.getUserMedia(constraints).then(stream => video.srcObject = stream);
-    }
+function cameraStart() {
+    navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then(function (stream) {
+            track = stream.getTracks()[0];
+            cameraView.srcObject = stream;
+        })
+        .catch(function (error) {
+            console.error("Oops. Something is broken.", error);
+        });
 }
+
+cameraTrigger.onclick = function() {
+    cameraSensor.width = cameraView.videoWidth;
+    cameraSensor.height = cameraView.videoHeight;
+    cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+    cameraOutput.src = cameraSensor.toDataURL("image/webp");
+    cameraOutput.classList.add("taken");
+};
+
+
+window.addEventListener("load", cameraStart, false);
