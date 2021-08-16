@@ -90,7 +90,7 @@
     <script type="text/javascript">
 
         window.onload = () => {
-            if (!navigator || (navigator && !navigator.getUserMedia)) {
+            if (!navigator || (navigator && navigator.mediaDevices && !navigator.mediaDevices.getUserMedia)) {
                 alert("Navigator is not available")
             }
         }
